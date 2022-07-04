@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+ backend-express:
+  build:
+   context: ../
+   dockerfile: appoinment-docker-dev/DockerfileBackEnd
+  ports:
+   - 3000:3000
+  environment:
+   - SERVER_PORT=8000
+   - CONNECTIONSTRING=mongodb://mongo-db:27017/appoinments
+  volumes:
+   - ../:/home
+  command: npm start
+
+ mongo-db:
+  image: mongo
+  ports:
+   - 27017:27017
+  volumes:
+   - n-appoinment-db-data:/data/db
+   - n-appoinment-db-conf:/data/configdb
+
+volumes:
+ n-appoinment-db-data:
+ n-appoinment-db-conf:

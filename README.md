@@ -6,9 +6,9 @@ Single appoinment restful API application backend for practicing node and expres
 
 This project is intended to be the backend for the frontend in project [v-appoinments](https://github.com/cardoso-dev/v-appoinments)
 
-The API will work with two entities:
+The API will work with two entities, persisted on a mongo db, according to the following schema:
 
-```json
+```js
 appoinment: {
     _id: ObjectId,
     date_hour: date,
@@ -21,7 +21,7 @@ appoinment: {
 }
 ```
 
-```json
+```js
 client: {
     _id: ObjectId,
     firts_name: string,
@@ -42,7 +42,7 @@ client: {
 
 ```
 
-## Install
+## Install (if you want to use docker skip to the next section)
 
 After cloning install dependencies
 
@@ -56,4 +56,35 @@ To run the server
 ```bash
 $ cd n-appoinments
 $ npm start
+```
+
+## Mount on docker containers
+
+Download the node and mongo docker images:
+
+```bash
+$ docker pull node
+$ docker pull mongo
+```
+
+Create docker volumens for mountig database
+```bash
+$ docker volume create n-appoinment-db-data
+$ docker volume create n-appoinment-db-conf
+```
+
+Move to appoinment-docker-dev folder and run the docker compose up to build (first time) the backend image and containers
+```bash
+$ cd appoinment-docker-dev
+$ docker-compose -f docker-compose-appoinment-dev.yml up --detach
+```
+
+After the first time you coul only start and stop the containers:
+```bash
+# Always ensure you are located in the docker folder
+$ cd appoinment-docker-dev
+# To start
+$ docker-compose -f docker-compose-appoinment-dev.yml start
+# To stop
+$ docker-compose -f docker-compose-appoinment-dev.yml stop
 ```
