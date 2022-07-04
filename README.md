@@ -4,8 +4,43 @@
 
 Single appoinment restful API application backend for practicing node and express.
 
-This project to is intended to be the backend for the frontend in project [v-appoinments](https://github.com/cardoso-dev/v-appoinments)
+This project is intended to be the backend for the frontend in project [v-appoinments](https://github.com/cardoso-dev/v-appoinments)
 
+The API will work with two entities:
+
+```json
+appoinment: {
+    _id: ObjectId,
+    date_hour: date,
+    state: string,
+    tag: string,
+    notes: string,
+    cost: double,
+    paid: boolean,
+    client_id: ObjectId
+}
+```
+
+```json
+client: {
+    _id: ObjectId,
+    firts_name: string,
+    last_name: string,
+    phones: [
+        {
+            number: string,
+            type: string
+        }
+    ],
+    address: {
+        street: string,
+        post_code: string,
+        city: string
+    },
+    email: string
+}
+
+```
 
 ## Install
 
