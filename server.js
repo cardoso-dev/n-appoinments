@@ -1,13 +1,25 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const {connectDb, getDb} = require('./database/db.js');
+
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+let appoinmentDb;
+connectDb((err) => {
+    if (err) {
+        console.error(err);
+        process.exit(1);
+    }
+    console.log("Successfully connected to MongoDB.");
+    appoinmentDb = getDb();
+});
 
+// TODO move persistence to the appoinmentDb
 let clients = [];
 let appoinments = [];
 

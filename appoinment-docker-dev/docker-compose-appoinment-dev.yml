@@ -6,7 +6,8 @@ services:
    context: ../
    dockerfile: appoinment-docker-dev/DockerfileBackEnd
   ports:
-   - 3000:3000
+   - 127.0.0.1:3000:3000
+  hostname: appoinments-be
   environment:
    - SERVER_PORT=8000
    - CONNECTIONSTRING=mongodb://mongo-db:27017/appoinments
@@ -17,7 +18,8 @@ services:
  mongo-db:
   image: mongo
   ports:
-   - 27017:27017
+   - 127.0.0.1:27017:27017
+  hostname: appoinments-db
   volumes:
    - n-appoinment-db-data:/data/db
    - n-appoinment-db-conf:/data/configdb
