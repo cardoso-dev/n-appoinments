@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 
 // TODO read the following constants from the environment 
-const dbName = "test1";
+const dbName = "appoinments";
 const dbHostname = "appoinments-db:27017";
 const connectionUrl = `mongodb://${dbHostname}`;
 

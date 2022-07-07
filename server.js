@@ -1,39 +1,27 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const {connectDb, getDb} = require('./database/db.js');
+const {connectDb, getDb} = require('./database/db');
+const routesClient = require('./routes/client');
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use('/api', routesClient);
 
-let appoinmentDb;
 connectDb((err) => {
     if (err) {
         console.error(err);
         process.exit(1);
     }
     console.log("Successfully connected to MongoDB.");
-    appoinmentDb = getDb();
+    app.locals.appoinmentDb = getDb();
 });
 
 // TODO move persistence to the appoinmentDb
-let clients = [];
 let appoinments = [];
-
-// Client endpoints for: POST and GET
-app.post('/client', (req, res) => {
-    // TODO: validate before saving
-    clients.push(req.body);
-    res.json({
-        "status": "succeeded"
-    });
-});
-app.get('/client', (req, res) => {
-    res.json(clients);
-});
 
 // Appoinment endpoints for: POST and GET
 app.post('/appoinment', (req, res) => {
