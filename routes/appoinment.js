@@ -7,8 +7,8 @@ const router = express.Router()
 
 module.exports = router;
 
-router.post('/client', async (req, res) => {
-    const collection = await getCollection(req, "client");
+router.post('/appoinment', async (req, res) => {
+    const collection = await getCollection(req, "appoinment");
     try {
         // TODO: validate before saving
         const created = await collection.insertOne(req.body);
@@ -16,10 +16,10 @@ router.post('/client', async (req, res) => {
             const cursor = collection.find({
                 "_id": created.insertedId
             });
-            const newClient = await cursor.next();
+            const newAppoinment = await cursor.next();
             res.status(200).json({
                 "status": "succeeded",
-                "client": newClient
+                "appoinment": newAppoinment
             });
         } else {
             res.status(500).json({
@@ -36,9 +36,9 @@ router.post('/client', async (req, res) => {
     }
 });
 
-router.get('/client', async (req, res) => {
+router.get('/appoinment', async (req, res) => {
     try {
-        const collection = await getCollection(req, "client");
+        const collection = await getCollection(req, "appoinment");
         res.status(200).json(await collection.find().toArray());
     } catch(error) {
         // TODO use logging instead of sending technical error
@@ -49,14 +49,14 @@ router.get('/client', async (req, res) => {
     }
 });
 
-router.get('/client/:clientId', async (req, res) => {
+router.get('/appoinment/:appoinmentId', async (req, res) => {
     try {
-        const collection = await getCollection(req, "client");
-        const client = await collection.findOne({
-            "_id": new ObjectId(req.params.clientId)
+        const collection = await getCollection(req, "appoinment");
+        const appoinment = await collection.findOne({
+            "_id": new ObjectId(req.params.appoinmentId)
         })
-        if (client){
-            res.status(200).json(client);
+        if (appoinment){
+            res.status(200).json(appoinment);
         } else {
             res.status(404).json();
         }
@@ -69,20 +69,20 @@ router.get('/client/:clientId', async (req, res) => {
     }
 });
 
-router.patch('/client/:clientId', async (req, res) => {
-    const collection = await getCollection(req, "client");
-    const clientId = new ObjectId(req.params.clientId);
+router.patch('/appoinment/:appoinmentId', async (req, res) => {
+    const collection = await getCollection(req, "appoinment");
+    const appoinmentId = new ObjectId(req.params.appoinmentId);
     try {
         // TODO: validate before saving
         const updated = await collection.updateOne(
-            {"_id": clientId},
+            {"_id": appoinmentId},
             {$set: req.body});
         if (updated.matchedCount) {
-            const cursor = collection.find({"_id": clientId});
-            const updatedClient = await cursor.next();
+            const cursor = collection.find({"_id": appoinmentId});
+            const updatedAppoinment = await cursor.next();
             res.status(200).json({
                 "status": "succeeded",
-                "client": updatedClient
+                "appoinment": updatedAppoinment
             });
         } else {
             res.status(404).json();
