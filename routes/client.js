@@ -9,7 +9,7 @@ module.exports = router;
 router.post('/', async (req, res) => {
     const newClient = await service.create(req);
     if (newClient) {
-        res.status(200).json({
+        res.status(201).json({
             "status": "succeeded",
             "client": newClient
         });
