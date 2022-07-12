@@ -7,7 +7,7 @@ const router = express.Router()
 
 module.exports = router;
 
-router.post('/client', async (req, res) => {
+router.post('/', async (req, res) => {
     const collection = await getCollection(req, "client");
     try {
         // TODO: validate before saving
@@ -36,7 +36,7 @@ router.post('/client', async (req, res) => {
     }
 });
 
-router.get('/client', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const collection = await getCollection(req, "client");
         res.status(200).json(await collection.find().toArray());
@@ -49,7 +49,7 @@ router.get('/client', async (req, res) => {
     }
 });
 
-router.get('/client/:clientId', async (req, res) => {
+router.get('/:clientId', async (req, res) => {
     try {
         const collection = await getCollection(req, "client");
         const client = await collection.findOne({
@@ -69,7 +69,7 @@ router.get('/client/:clientId', async (req, res) => {
     }
 });
 
-router.patch('/client/:clientId', async (req, res) => {
+router.patch('/:clientId', async (req, res) => {
     const collection = await getCollection(req, "client");
     const clientId = new ObjectId(req.params.clientId);
     try {

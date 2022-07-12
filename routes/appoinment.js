@@ -7,7 +7,7 @@ const router = express.Router()
 
 module.exports = router;
 
-router.post('/appoinment', async (req, res) => {
+router.post('/', async (req, res) => {
     const collection = await getCollection(req, "appoinment");
     try {
         // TODO: validate before saving
@@ -36,7 +36,7 @@ router.post('/appoinment', async (req, res) => {
     }
 });
 
-router.get('/appoinment', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const collection = await getCollection(req, "appoinment");
         res.status(200).json(await collection.find().toArray());
@@ -49,7 +49,7 @@ router.get('/appoinment', async (req, res) => {
     }
 });
 
-router.get('/appoinment/:appoinmentId', async (req, res) => {
+router.get('/:appoinmentId', async (req, res) => {
     try {
         const collection = await getCollection(req, "appoinment");
         const appoinment = await collection.findOne({
@@ -69,7 +69,7 @@ router.get('/appoinment/:appoinmentId', async (req, res) => {
     }
 });
 
-router.patch('/appoinment/:appoinmentId', async (req, res) => {
+router.patch('/:appoinmentId', async (req, res) => {
     const collection = await getCollection(req, "appoinment");
     const appoinmentId = new ObjectId(req.params.appoinmentId);
     try {

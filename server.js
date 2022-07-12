@@ -6,12 +6,13 @@ const routesClient = require('./routes/client');
 const routesAppoinment = require('./routes/appoinment');
 
 const app = express();
+const apiVersion = 'v1';
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/api', routesClient);
-app.use('/api', routesAppoinment);
+app.use(`/api/${apiVersion}/client`, routesClient);
+app.use(`/api/${apiVersion}/appoinment`, routesAppoinment);
 
 connectDb((err) => {
     if (err) {
