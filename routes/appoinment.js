@@ -1,47 +1,31 @@
 const express = require('express');
-const { ObjectId } = require('mongodb');
 
-const { getCollection } = require('./utils');
-
-const router = express.Router()
+const router = express.Router();
+const AppoinmentService = require('../services/appoinment');
+const service = new AppoinmentService();
 
 module.exports = router;
 
 router.post('/', async (req, res) => {
-    const collection = await getCollection(req, "appoinment");
-    try {
-        // TODO: validate before saving
-        const created = await collection.insertOne(req.body);
-        if (created.acknowledged) {
-            const cursor = collection.find({
-                "_id": created.insertedId
-            });
-            const newAppoinment = await cursor.next();
-            res.status(200).json({
-                "status": "succeeded",
-                "appoinment": newAppoinment
-            });
-        } else {
-            res.status(500).json({
-                "status": "failed",
-                "error": "Oops! something went wrong..."
-            });
-        }
-    }  catch(error) {
-        // TODO use logging instead of sending technical error
+    const newAppoinment = await service.create(req);
+    if (newAppoinment) {
+        res.status(200).json({
+            "status": "succeeded",
+            "appoinment": newAppoinment
+        });
+    } else {
         res.status(500).json({
             "status": "failed",
-            "error": error
+            "error": "Oops! something went wrong..."
         });
     }
 });
 
 router.get('/', async (req, res) => {
-    try {
-        const collection = await getCollection(req, "appoinment");
-        res.status(200).json(await collection.find().toArray());
-    } catch(error) {
-        // TODO use logging instead of sending technical error
+    const appoinments = await service.getAll(req);
+    if (appoinments) {
+        res.status(200).json(appoinments);
+    } else {
         res.status(500).json({
             "status": "failed",
             "error": error
@@ -50,48 +34,23 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:appoinmentId', async (req, res) => {
-    try {
-        const collection = await getCollection(req, "appoinment");
-        const appoinment = await collection.findOne({
-            "_id": new ObjectId(req.params.appoinmentId)
-        })
-        if (appoinment){
-            res.status(200).json(appoinment);
-        } else {
-            res.status(404).json();
-        }
-    } catch(error) {
-        // TODO use logging instead of sending technical error
-        res.status(500).json({
-            "status": "failed",
-            "error": error
-        });
+    const resp = await service.getOne(req, req.params.appoinmentId);
+    if (resp['error']) {
+        res.status(500).json();
+    } else if (!resp['found']) {
+        res.status(404).json();
+    } else {
+        res.status(200).json(resp['appoinment']);
     }
 });
 
 router.patch('/:appoinmentId', async (req, res) => {
-    const collection = await getCollection(req, "appoinment");
-    const appoinmentId = new ObjectId(req.params.appoinmentId);
-    try {
-        // TODO: validate before saving
-        const updated = await collection.updateOne(
-            {"_id": appoinmentId},
-            {$set: req.body});
-        if (updated.matchedCount) {
-            const cursor = collection.find({"_id": appoinmentId});
-            const updatedAppoinment = await cursor.next();
-            res.status(200).json({
-                "status": "succeeded",
-                "appoinment": updatedAppoinment
-            });
-        } else {
-            res.status(404).json();
-        }
-    }  catch(error) {
-        // TODO use logging instead of sending technical error
-        res.status(500).json({
-            "status": "failed",
-            "error": error
-        });
+    const resp = await service.updateOne(req, req.params.appoinmentId);
+    if (resp['error']) {
+        res.status(500).json();
+    } else if (!resp['found']) {
+        res.status(404).json();
+    } else {
+        res.status(200).json(resp['appoinment']);
     }
 });
