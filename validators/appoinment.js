@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const date_hour = Joi.date();
+const dateHour = Joi.date();
 const state = Joi.string().valid(
     'scheduled', 'cancelled_by_creator', 'cancelled_by_client', 'ongoing',
     'done', 'missed_by_creator', 'missed_by_client');
@@ -12,7 +12,7 @@ const paid = Joi.bool();
 const client_id = Joi.string().hex().length(24);
 
 const newAppoinment = Joi.object({
-    date_hour: date_hour.required(),
+    dateHour: dateHour.required(),
     state: state.required(),
     tag: tag.required(),
     cost: cost.required(),
@@ -22,7 +22,7 @@ const newAppoinment = Joi.object({
 });
 
 const updateAppoinment = Joi.object({
-    date_hour: date_hour,
+    dateHour: dateHour,
     state: state,
     tag: tag,
     cost: cost,
