@@ -11,8 +11,8 @@ const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(`/api/${apiVersion}/client`, routesClient);
-app.use(`/api/${apiVersion}/appoinment`, routesAppoinment);
+app.use(`/api/${apiVersion}/clients`, routesClient);
+app.use(`/api/${apiVersion}/appoinments`, routesAppoinment);
 
 connectDb((err) => {
     if (err) {
