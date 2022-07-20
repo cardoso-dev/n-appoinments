@@ -14,16 +14,19 @@ app.use(bodyParser.json());
 app.use(`/api/${apiVersion}/clients`, routesClient);
 app.use(`/api/${apiVersion}/appoinments`, routesAppoinment);
 
-connectDb((err) => {
-    if (err) {
+connectDb()
+    .then(() => {
+        console.log("Successfully connected to MongoDB.");
+        app.emit('dbReady');
+    })
+    .catch((err) => {
         console.error(err);
         process.exit(1);
-    }
-    console.log("Successfully connected to MongoDB.");
-    app.locals.appoinmentDb = getDb();
-});
+    });
 
-app.listen(
-    port,
-    () => console.log(`Listening on port ${port}!`)
-);
+app.on('dbReady', () => {
+    app.listen(
+        port,
+        () => console.log(`Listening on port ${port}!`)
+    );
+});

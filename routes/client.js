@@ -1,9 +1,9 @@
 const express = require('express');
 
 const router = express.Router()
-const ClientService = require('../services/client');
+const DocumentService = require('../services/service');
 const clientValidator = require('../validators/client');
-const service = new ClientService();
+const service = new DocumentService('client');
 
 const { find, findOne, insertOne, updateOne } = require('./utils');
 

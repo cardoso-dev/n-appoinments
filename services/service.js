@@ -3,11 +3,15 @@ const { ObjectId } = require('mongodb');
 const { getCollection } = require('./utils');
 
 
-class AppoinmentService {
+class DocumentService {
+
+    constructor(collectionName) {
+        this.collectionName = collectionName;
+    }
     
     async getAll (req) {
+        const collection = await getCollection(this.collectionName);
         try {
-            const collection = await getCollection(req, "appoinment");
             return await collection.find().toArray();
         } catch(error) {
             // TODO use logging
@@ -16,16 +20,15 @@ class AppoinmentService {
     }
 
     async create (req) {
-        const collection = await getCollection(req, "appoinment");
+        const collection = await getCollection(this.collectionName);
         try {
-            // TODO: validate before saving
             const created = await collection.insertOne(req.body);
             if (created.acknowledged) {
                 const cursor = collection.find({
                     "_id": created.insertedId
                 });
-                const newAppoinment = await cursor.next();
-                return newAppoinment;
+                const newDocument = await cursor.next();
+                return newDocument;
             } else {
                 return false;
             }
@@ -35,18 +38,19 @@ class AppoinmentService {
         }
     }
 
-    async getOne (req, appoinmentId) {
-        const collection = await getCollection(req, "appoinment");
+    async getOne (req, documentId) {
+        const collection = await getCollection(this.collectionName);
         let response = {
             'error': false,
             'found': false
         };
+
         try {
-            const appoinment = await collection.findOne({
-                "_id": new ObjectId(appoinmentId)
+            const document = await collection.findOne({
+                "_id": new ObjectId(documentId)
             });
-            if (appoinment){
-                response['appoinment'] = appoinment;
+            if (document){
+                response[this.collectionName] = document;
                 response['found'] = true;
             } 
         } catch(error) {
@@ -55,22 +59,22 @@ class AppoinmentService {
         return response;
     }
 
-    async updateOne (req, appoinmentId) {
-        const collection = await getCollection(req, "appoinment");
-        const appoinmentIdObj = new ObjectId(appoinmentId);
+    async updateOne (req, documentId) {
+        const collection = await getCollection(this.collectionName);
+        const documentIdObj = new ObjectId(documentId);
+    
         let response = {
             'error': false,
             'found': false
         };
         try {
-            // TODO: validate before saving
             const updated = await collection.updateOne(
-                {"_id": appoinmentIdObj},
+                {"_id": documentIdObj},
                 {$set: req.body});
             if (updated.matchedCount) {
-                const cursor = collection.find({"_id": appoinmentIdObj});
-                const updatedAppoinment = await cursor.next();
-                response['appoinment'] = updatedAppoinment;
+                const cursor = collection.find({"_id": documentIdObj});
+                const updatedDocument = await cursor.next();
+                response[this.collectionName] = updatedDocument;
                 response['found'] = true;
             }
         }  catch(error) {
@@ -81,4 +85,4 @@ class AppoinmentService {
     }
 }
 
-module.exports = AppoinmentService;
+module.exports = DocumentService;

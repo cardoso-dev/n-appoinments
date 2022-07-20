@@ -1,9 +1,9 @@
 const express = require('express');
 
 const router = express.Router();
-const AppoinmentService = require('../services/appoinment');
+const DocumentService = require('../services/service');
 const appoinmentValidator = require('../validators/appoinment');
-const service = new AppoinmentService();
+const service = new DocumentService('appoinment');
 
 const { find, findOne, insertOne, updateOne } = require('./utils');
 

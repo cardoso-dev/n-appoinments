@@ -52,6 +52,7 @@ $ npm install
 ```
 
 To run the server 
+* If you run it this way you must provide a mongodb connection in database/db.js to connect with
 
 ```bash
 $ cd n-appoinments

@@ -1,8 +1,8 @@
+const { Collection } = require('mongodb');
+const { getDb } = require('../database/db');
+
 module.exports = {
-    getCollection: async (req, name) => {
-        const db = req.app.locals.appoinmentDb;
-        const collection = db.collection(name);
-        
-        return collection
+    getCollection: async (name) => {
+        return await getDb().collection(name);
     }
 }
