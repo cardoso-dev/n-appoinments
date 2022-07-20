@@ -5,59 +5,25 @@ const ClientService = require('../services/client');
 const clientValidator = require('../validators/client');
 const service = new ClientService();
 
+const { find, findOne, insertOne, updateOne } = require('./utils');
+
 module.exports = router;
 
 router.post('/',
     clientValidator('create'),
-    async (req, res) => {
-        const newClient = await service.create(req);
-        if (newClient) {
-            res.status(201).json({
-                "status": "succeeded",
-                "client": newClient
-            });
-        } else {
-            res.status(500).json({
-                "status": "failed",
-                "error": "Oops! something went wrong..."
-            });
-        }
-});
+    async (req, res) => { insertOne(req, res, 'client', service) }
+);
 
-router.get('/', async (req, res) => {
-    const clients = await service.getAll(req);
-    if (clients) {
-        res.status(200).json(clients);
-    } else {
-        res.status(500).json({
-            "status": "failed",
-            "error": error
-        });
-    }
-});
+router.get('/',
+    async (req, res) => { find(req, res, service) }
+);
 
 router.get('/:clientId',
     clientValidator('get'),
-    async (req, res) => {
-        const resp = await service.getOne(req, req.params.clientId);
-        if (resp['error']) {
-            res.status(500).json();
-        } else if (!resp['found']) {
-            res.status(404).json();
-        } else {
-            res.status(200).json(resp['client']);
-    }
-});
+    async (req, res) => { findOne(req, res, 'clientId', 'client', service) }
+);
 
 router.patch('/:clientId',
     clientValidator('update'),
-    async (req, res) => {
-        const resp = await service.updateOne(req, req.params.clientId);
-        if (resp['error']) {
-            res.status(500).json();
-        } else if (!resp['found']) {
-            res.status(404).json();
-        } else {
-            res.status(200).json(resp['client']);
-        }
-});
+    async (req, res) => { updateOne(req, res, 'clientId', 'client', service) }
+);
