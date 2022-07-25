@@ -15,6 +15,17 @@ services:
    - ../:/home
   command: npm start
 
+ frontend-vue:
+  build:
+   context: ../../v-appoinments
+   dockerfile: appoinment-docker-dev-fe/DockerfileFrontEnd
+  ports:
+   - 127.0.0.1:8080:8080
+  hostname: appoinments-fe
+  volumes:
+   - ../../v-appoinments/v-appoinments-project/:/home
+  command: npm run serve
+
  mongo-db:
   image: mongo
   ports:
