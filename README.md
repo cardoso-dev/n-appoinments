@@ -7,7 +7,7 @@ Single appoinment restful API application backend for practicing node and expres
 
 This project is intended to be the backend for the frontend in project [v-appoinments](https://github.com/cardoso-dev/v-appoinments) so, for a complete experience you should clone v-appoinments as well, the project is ready to run both using docker-compose (check the section below)
 
-![algo](./assets/mevn.jpg)
+![MEVN](./assets/mevn.jpg)
 
 The API will work with two entities, persisted on a mongo db, according to the following schema:
 
